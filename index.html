@@ -1,12 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+<title>FittingBox</title>
+<style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    font: 62.5% arial, sans-serif;
+    background: #ccc;
+  }
+  .wrapper {
+    --padding: 0.5rem;
+    height: calc(100vh - var(--padding) * 2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: var(--padding);
+  }        
+  #fitmix-container {
+    width: min(500px, 90vw);
+    flex: 1;
+  }        
+</style>
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+  <script src="//vto-advanced-integration-api.fittingbox.com/index.js" type="text/javascript"></script>
+  <script>
+    var params = { 
+      apiKey: 'TBVAcXitApiZPVH791yxdHbAc8AKzBwtCnjtv6Xn',
+      frame: '0888392486523',
+      onStopVto: hide,
+      /*
+      // Used to display the embedded native "toolbar"
+      materials: {
+        materials: [
+          {
+            name: 'Sample_Deepblue',
+            image: 'https://picsum.photos/32'
+          }
+        ]
+      }*/
+    };
+
+    window.onload = function() {  
+      window.fitmixInstance = FitMix.createWidget('fitmix-container', params, function() {});
+    }
+
+    const fitmix = document.getElementById("fitmix-container")
+
+    function hide(){
+      fitmix.style.display= 'none';
+    }
+
+    function show(){
+      fitmix.style.display= 'block';
+    }
+
+    function openVto(){
+      fitmixInstance.startVto('live')
+      show()
+    }
+
+    function stopVto(){
+      fitmixInstance.stopVto()
+    }
+
+    var exposureInput = document.getElementById("exposure");
+    exposureInput.addEventListener("change", function() {
+      fitmixInstance.setExposureLevel(Number(exposureInput.value));
+    }, false);    
+  </script>
+  <div class="wrapper">
+    <div>
+      <button onclick="fitmixInstance.setFrame('0888392486523')">Sample frame 1</button>
+      <button onclick="fitmixInstance.setFrame('8056597233958')">Sample frame 2</button>
+    </div>
+    <div>
+      <button onclick="fitmixInstance.setLensMaterial('Sample_Deepblue')">Lens material 1</button>
+      <button onclick="fitmixInstance.setLensMaterial('Sample_Horizon')">Lens material 2</button>
+      <button onclick="fitmixInstance.setLensMaterial('Sample_Photochromic')">Lens material 3</button>
+    <label for="exposure">Material 3 - Exposure</label>
+    <input type="range" id="exposure" name="exposure" min="0" max="100" />
+    </div>
+    
+    <button onclick="openVto()">User action to start the VTO experience</button>
+    <button onclick="stopVto()">User action to stop the VTO experience</button>  
+  
+    <div id="fitmix-container"></div>
+  </div>
 
 </body>
 </html>
